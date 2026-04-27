@@ -14,6 +14,15 @@ pipeline {
             }
         }
 
+        stage('Check Authors.name type') {
+            steps {
+                sh '''
+                    chmod +x check_author_name_type.sh
+                    ./check_author_name_type.sh
+                '''
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 sh "docker build --no-cache -f php.Dockerfile -t mhnk2002/crudback1 ."
@@ -36,10 +45,10 @@ pipeline {
 
         stage('JSON Validation Tests') {
             steps {
-                sh """
+                sh '''
                     chmod +x tests/json_validation_test.sh
                     ./tests/json_validation_test.sh
-                """
+                '''
             }
         }
     }
