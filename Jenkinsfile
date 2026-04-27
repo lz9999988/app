@@ -14,6 +14,25 @@ pipeline {
             }
         }
 
+        stage('Load DB schema from dump') {
+            steps {
+                sh '''
+                    POD=$(kubectl get pods -o name | grep '^pod/mysql-' | head -n1 | cut -d/ -f2)
+
+                    if [ -z "$POD" ]; then
+                        echo "ERROR: MySQL pod not found"
+                        exit 1
+                    fi
+
+                    echo "Using MySQL pod: $POD"
+
+                    kubectl exec -i $POD -- mysql -u root -psecret -e "DROP DATABASE IF EXISTS dbook; CREATE DATABASE dbook CHARACTER SET utf8 COLLATE utf8_general_ci;"
+
+                    kubectl exec -i $POD -- mysql -u root -psecret dbook < dump/dbook.sql
+                '''
+            }
+        }
+
         stage('Check Authors.name type') {
             steps {
                 sh '''
