@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `Authors` (
   `author_id` int NOT NULL,
-  `name` text NOT NULL,
+  `name` varchar(50) NOT NULL,
   `surname` varchar(50) NOT NULL,
   `country` varchar(50) NOT NULL,
   `date_of_birth` date NOT NULL
